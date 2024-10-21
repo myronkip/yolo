@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: perischepkemoi/yolo-backend:v1.0.1
+          image: myronkip/yolo-backend:v1.0.3
           command: ["npm", "start"] 
           ports:
             - containerPort: 5000
