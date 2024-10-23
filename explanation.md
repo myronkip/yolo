@@ -128,3 +128,5 @@ To achieve the task the following git workflow was used:
 
 13. Created explanation.md file and modified it as the commit messages in the repo will explain.
 
+##Dockerhu screenshot
+![alt text](image-1.png)
