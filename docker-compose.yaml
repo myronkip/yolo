@@ -1,56 +1,47 @@
+# version: "3"  # Specify the version of Docker Compose
 
 services:
-
-  #Builds the frontend Docker image and creates the frontend microservice
-  yolo-frontend:
+  # Builds the frontend Docker image and creates the frontend microservice
+  frontend:
     image: myronkip/yolo-frontend:v1.0.5
-    build: ./client
-    container_name: yolo-frontend 
+    # build: ./client
+    container_name: yolo-frontend
     ports:
       - "80:80"
     depends_on: 
-      - yolo-backend
+      - backend
     networks:
-      - app-net
+      - app_net
 
-  #Builds the backend Docker image and creates the backend microservice
-  yolo-backend:
+  # Builds the backend Docker image and creates the backend microservice
+  backend:
     image: myronkip/yolo-backend:v1.0.3
-    build: ./backend
-    container_name: yolo-backend 
+    # build: ./backend
+    container_name: yolo-backend
     restart: always
     ports:
       - "5000:5000"
     depends_on: 
       - mongo
     networks:
-      - app-net
+      - app_net
 
-  #Creates the database microservice
+  # Creates the database microservice
   mongo:
     image: mongo
-    container_name: app-mongo
+    container_name: mongo
     ports:
       - "27017:27017"
     networks:
-      - app-net
+      - app_net
     volumes:
-      - type: volume
-        source: app-mongo-data
-        target: /data/db
+      - app_mongo_data:/data/db  # Use the named volume directly
 
-#Creates the network infrastructure necessary for the containers to communicate with each other
+# Creates the network infrastructure necessary for the containers to communicate with each other
 networks:
-  app-net:
-    name: app-net
+  app_net:
     driver: bridge
-    attachable: true
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16 
-          ip_range: 172.20.0.0/16 
 
-#Creates a Docker volume that persists all the data stored in the database
+# Creates a Docker volume that persists all the data stored in the database
 volumes:
-  app-mongo-data:
-    driver: local
+  app_mongo_data:

@@ -1,30 +1,20 @@
 ---
+- name: Clone the backend repository
+  git:
+    repo: "{{ repo_url }}"
+    dest: /opt/yolo-backend
+
 - name: Pull image from repository
   docker_image:
-    name: brianbwire/brian-yolo-backend:v1.0.0
-    source: pull
----
-- name: Pull image from repository
-  docker_image:
-    name: myronkip/yolo-backend:v1.0.1
+    name: "{{ docker_image }}"
     source: pull
 
 - name: Create Node.js Backend Container
   docker_container:
-    name: yolo-backend
-    image: myronkip/yolo-backend:v1.0.1
+    name: "{{ container_name }}"
+    image: "{{ docker_image }}"
     networks:
-      - name: app-net
-    ports:
-      - "5000:5000"
-    command: "npm start"
-  become: yes
-- name: Create Node.js Backend Container
-  docker_container:
-    name: brian-yolo-backend
-    image: brianbwire/brian-yolo-backend:v1.0.0
-    networks:
-      - name: app-net
+      - name: "{{ network }}"
     ports:
       - "5000:5000"
     command: "npm start"

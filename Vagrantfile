@@ -69,7 +69,9 @@ Vagrant.configure("2") do |config|
   # SHELL
   # Provisioning configuration for Ansible.
 config.vm.provision "ansible" do |ansible|
+  ansible.verbose = "vvv"
   ansible.playbook = "playbook.yml"
+  # ansible.extra_args = ["--flush-cache"]
 config.vm.network "forwarded_port", guest: 3000, host: 3000  
   end
 end

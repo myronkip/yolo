@@ -1,0 +1,20 @@
+---
+- name: Deploy Frontend Application
+  block:
+    - name: Pull Docker image for frontend
+      docker_image:
+        name: "{{ frontend_docker_image }}"
+        source: pull
+
+    - name: Run Docker container for frontend
+      docker_container:
+        name: "{{ frontend_container_name }}"
+        image: "{{ frontend_docker_image }}"
+        state: started
+        ports:
+          - "80:80"
+        networks:
+           - name: app_net
+        volumes:
+          - /opt/yolo-frontend:/usr/share/nginx/html
+  tags: frontend-deployment

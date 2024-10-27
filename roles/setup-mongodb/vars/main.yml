@@ -1,4 +1,4 @@
 ---
-mongo_container_name: app_mongo
-mongo_network: app-network
-mongo_volume: app-mongo-data
+mongo_container_name: mongo
+mongo_network: app_net
+mongo_volume: app_mongo_data

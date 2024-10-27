@@ -1,4 +1,5 @@
 ---
 container_name: yolo-backend
-network: app-net
-volume: app-mongo-data/app
+network: app_net
+# volume: app-mongo-data/app
+docker_image: myronkip/yolo-backend:v1.0.3

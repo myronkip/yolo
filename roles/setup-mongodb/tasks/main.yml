@@ -1,14 +1,14 @@
 ---
 - name: Run MongoDB Container
   docker_container:
-    name: app-mongo
+    name: mongo
     image: mongo
     ports:
       - '27017:27017'
     volumes:
-      - ./app-mongo-data:/data/db
+      - app_mongo_data:/data/db
     networks:
-      - name: app-net
+      - name: app_net
   tags:
     - database
     - backend
