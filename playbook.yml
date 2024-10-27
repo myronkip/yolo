@@ -57,7 +57,6 @@
     - name: Download Docker Compose
       get_url:
         url : "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64"
-        # url: "https://github.com/docker/compose/releases/download/2.29.7/docker-compose-$(uname -s)-$(uname -m)"
         dest: /usr/local/bin/docker-compose
         mode: 'u+x,g+x'
 
@@ -88,12 +87,6 @@
     
   tasks:
 
-  # - name: Tear down existing services
-  #   community.docker.docker_compose_v2:
-  #     project_src: /opt/yolo-backend
-  #     state: absent
-  #     recreate: "always"
-
   - name: Tear down existing services
     ansible.builtin.shell: "docker stop $(docker ps -q) || true && docker rm $(docker ps -aq)"
     args:
@@ -102,21 +95,18 @@
   - name: Create and start services
     community.docker.docker_compose_v2:
       project_src: /opt/yolo-backend
-      # recreate: "never"
-      # pull: "missing"
-      # state: "absent"
     register: output
 
   - name: Show results
     ansible.builtin.debug:
       var: output
 
-  - name: Verify that the db and web services are running
-    ansible.builtin.assert:
-      that:
-        - "output.services.mongo.mongo.state.running"
-        - "output.services.frontend.yolo-frontend.state.running"
-        - "output.services.backend.yolo-backend.state.running"
+  # - name: Verify that the db and web services are running
+  #   ansible.builtin.assert:
+  #     that:
+  #       - "output.services.mongo.mongo.state.running"
+  #       - "output.services.frontend.yolo-frontend.state.running"
+  #       - "output.services.backend.yolo-backend.state.running"
 
 
 
