@@ -68,10 +68,13 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
   # Provisioning configuration for Ansible.
-config.vm.provision "ansible" do |ansible|
-  ansible.verbose = "vvv"
-  ansible.playbook = "playbook.yml"
-  # ansible.extra_args = ["--flush-cache"]
-config.vm.network "forwarded_port", guest: 80, host: 8090,  host_ip: "127.0.0.1"
+  config.vm.provision "ansible" do |ansible|
+    ansible.verbose = "vvv"
+    ansible.playbook = "playbook.yml"
+    
+  # Forward port 80 from guest to host port 8090
+  config.vm.network "forwarded_port", guest: 80, host: 8090,  host_ip: "127.0.0.1"
+  # Forward port 5000 from guest to host port 5000
+  config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
   end
 end
