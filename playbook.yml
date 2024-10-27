@@ -85,26 +85,38 @@
     - name: Verify Docker installation
       command: docker ps
       register: docker_ps
-
-    - name: Verify Docker Compose installation
-      command: docker-compose --version
-      register: docker_compose_version
-
-    - debug:
-        msg: "Docker Ps: {{ docker_ps.stdout }} Docker Compose version: {{ docker_compose_version.stdout }}"
     
   tasks:
 
-  - name: Start services with Docker Compose
-    # command: docker-compose up -d --no-recreate
-    command: docker compose start
+  # - name: Tear down existing services
+  #   community.docker.docker_compose_v2:
+  #     project_src: /opt/yolo-backend
+  #     state: absent
+  #     recreate: "always"
+
+  - name: Tear down existing services
+    ansible.builtin.shell: "docker stop $(docker ps -q) || true && docker rm $(docker ps -aq)"
     args:
-        chdir: /opt/yolo-backend
-    register: compose_otput
-  
-  - name: Show compose output
-    debug: 
-      msg: " {{ compose_otput.stdout_lines}}"
+      chdir: /opt/yolo-backend
+
+  - name: Create and start services
+    community.docker.docker_compose_v2:
+      project_src: /opt/yolo-backend
+      # recreate: "never"
+      # pull: "missing"
+      # state: "absent"
+    register: output
+
+  - name: Show results
+    ansible.builtin.debug:
+      var: output
+
+  - name: Verify that the db and web services are running
+    ansible.builtin.assert:
+      that:
+        - "output.services.mongo.mongo.state.running"
+        - "output.services.frontend.yolo-frontend.state.running"
+        - "output.services.backend.yolo-backend.state.running"
 
 
 
