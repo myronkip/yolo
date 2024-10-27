@@ -3,6 +3,7 @@
   git:
     repo: "{{ repo_url }}"
     dest: /opt/yolo-backend
+    version: 'test'  
 
 - name: Pull image from repository
   docker_image:

@@ -96,7 +96,8 @@
   tasks:
 
   - name: Start services with Docker Compose
-    command: docker-compose up -d --no-recreate
+    # command: docker-compose up -d --no-recreate
+    command: docker compose start
     args:
         chdir: /opt/yolo-backend
     register: compose_otput
