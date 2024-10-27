@@ -72,6 +72,6 @@ config.vm.provision "ansible" do |ansible|
   ansible.verbose = "vvv"
   ansible.playbook = "playbook.yml"
   # ansible.extra_args = ["--flush-cache"]
-config.vm.network "forwarded_port", guest: 80, host: 80  
+config.vm.network "forwarded_port", guest: 80, host: 8090,  host_ip: "127.0.0.1"
   end
 end
