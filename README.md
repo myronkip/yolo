@@ -1,11 +1,12 @@
-# YOLO Full Stack Application Deployment using Vagrant
+# YOLO Full Stack Application Deployment using Vagrant and Ansible
 
-This README outlines the procedures for deploying a containerized full stack YOLO application using Vagrant. This project leverages Vagrant for environment management, Docker for containerization, and a YOLO model for object detection tasks.
+This README outlines the procedures for deploying a containerized full stack YOLO (You Only Look Once) application using Vagrant and Ansible. This project leverages Vagrant for environment management, Docker for containerization, and a YOLO model for object detection tasks.
 
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
 - [Installation Steps](#installation-steps)
+- [Provisioning Vagrant using Ansible Playbook](#provisioning-vagrant-using-ansible-playbook)
 - [Running the Application](#running-the-application)
 - [Accessing the Application](#accessing-the-application)
 - [Troubleshooting](#troubleshooting)
@@ -17,8 +18,8 @@ Before you begin, ensure you have the following installed:
 - [Vagrant](https://www.vagrantup.com/downloads)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [Docker](https://www.docker.com/get-started)
+- [Ansible](https://www.ansible.com/resources/get-started)
 - [Git](https://git-scm.com/downloads)
-
 
 ## Installation Steps
 
@@ -28,7 +29,8 @@ Before you begin, ensure you have the following installed:
 
    ```bash
    git clone https://github.com/myronkip/yolo.git
-   checkout branch name test
+   cd yolo
+   git checkout test
    ```
 
 2. **Vagrant Setup**
@@ -37,22 +39,34 @@ Before you begin, ensure you have the following installed:
 
    ```ruby
    Vagrant.configure("2") do |config|
-     config.vm.box = "ubuntu/focal64
+     config.vm.box = "ubuntu/focal64"
      config.vm.network "forwarded_port", guest: 8090, host: 8090
+
+     # Ansible provisioner
+     config.vm.provision "ansible" do |ansible|
+       ansible.playbook = "ansible/playbook.yml"
+     end
    end
    ```
 
-3. **Start the Vagrant Environment**
+3. **Create the Ansible Playbook**
 
-   Run the following command to start the Vagrant environment:
+   Create a directory named `ansible` and within that directory, create a file named `playbook.yml`. This playbook will define the tasks to provision your Vagrant VM.
+
+
+## Provisioning Vagrant using Ansible Playbook
+
+1. **Start the Vagrant Environment**
+
+   Run the following command to start the Vagrant environment and provision it using the Ansible playbook:
 
    ```bash
-   vagrant up
+   vagrant up --provision
    ```
 
-   This command will create a virtual machine and provision it with Docker.
+   This command will create a virtual machine, provision it with Ansible, and install Docker and Docker Compose.
 
-4. **SSH into Vagrant**
+2. **SSH into Vagrant**
 
    Once the VM is up, SSH into it:
 
@@ -60,7 +74,7 @@ Before you begin, ensure you have the following installed:
    vagrant ssh
    ```
 
-5. **Navigate to the Project Directory**
+3. **Navigate to the Project Directory**
 
    Inside the Vagrant VM, navigate to the project directory:
 
@@ -68,9 +82,9 @@ Before you begin, ensure you have the following installed:
    cd /opt/yolo
    ```
 
-6. **Build and Run Docker Containers**
+4. **Build and Run Docker Containers**
 
-   Use Docker Compose to build and run the containers:(if the containers are running,skip to running application)
+   Use Docker Compose to build and run the containers (if the containers are running, skip to running application):
 
    ```bash
    docker-compose up --build
@@ -83,7 +97,7 @@ Before you begin, ensure you have the following installed:
 The application consists of a backend service (which handles YOLO model requests) and a frontend service (which provides the user interface). 
 
 1. **Backend Service**: The backend runs on port 5000.
-2. **Frontend Service**: The frontend runs on port 8090 (or any port configured in the `docker-compose.yml`).
+2. **Frontend Service**: The frontend runs on port 8090.
 
 ## Accessing the Application
 
@@ -102,5 +116,4 @@ Once the containers are up and running, you can access the application by openin
 
 - Ensure that Docker and VirtualBox are correctly installed and running on your machine.
 
-
-
+---
