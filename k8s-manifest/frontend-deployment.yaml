@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yolo-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: yolo-frontend
+  template:
+    metadata:
+      labels:
+        app: yolo-frontend
+    spec:
+      containers:
+        - name: yolo-frontend
+          image: myronkip/yolo-frontend:v1.0.9
+          ports:
+            - containerPort: 80
+          env:
+            - name: MONGO_URL
+              value: "mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo:27017"  # MongoDB service URL
+          resources:
+            requests:
+              memory: "256Mi"   # Minimum amount of memory requested
+              cpu: "500m"       # Minimum amount of CPU requested (500m = 0.5 CPU cores)
+            limits:
+              memory: "512Mi"   # Maximum amount of memory allowed
+              cpu: "1"          # Maximum amount of CPU allowed (1 = 1 CPU core)
