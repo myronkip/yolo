@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: frontend
+    app: yolo-frontend
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8091
+      targetPort: 80
